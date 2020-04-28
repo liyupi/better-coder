@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<title>鱼皮-自动敲网页</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.5.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typeit@6.1.1/dist/typeit.min.js"></script>
+<style type="text/css">
+	#inputUrl {
+		margin-bottom: 20px;
+	}
+	#runBtn {
+		font-size: 16px;
+	}
+	.box {
+		width: 48%;
+		box-sizing: border-box;
+		padding: 10px;
+		margin-right: 1%;
+		border: 1px solid #aaa;
+		float: left;
+		min-height: 600px;
+	}
+	xmp {
+		white-space: normal;
+		word-break: break-word;
+		margin: 0;
+	}
+</style>
+</head>
+<body>
+<h1>鱼皮-自动敲网页</h1>
+<div>
+输入网址（添加http/https前缀）：<input type="text" id="inputUrl">
+<input type="button" id="runBtn" value="喝杯☕️ 看你敲">
+</div>
+<div class="box"><pre><code id="preHtml">请先输入网址</code></pre></div>
+<iframe id="show" class="box">请先输入网址</iframe>
+
+
+
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+
+$(function() {
+	// 预拦截器
+	$.ajaxPrefilter(function (options) {
+        if (options.crossDomain && jQuery.support.cors) {
+            var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+            options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+        }
+    });
+
+	$('#runBtn').click(() => {
+		$('#preHtml').html('加载中。。。');
+		const url = $('#inputUrl').val();
+		// 请求网页
+	    $.get(url, res => {
+	        	$('#preHtml').html('<xmp>' + res + '</xmp>');
+	        	$('#show')[0].src = url;
+	        	
+	        	new TypeIt("#preHtml", {
+				  strings: res,
+				  speed: 20,
+				  loop: true
+				}).go();
+			}
+	    );
+	})
+});
+</script>
+
+
+</body>
+</html> 
