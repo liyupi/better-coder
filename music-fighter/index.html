@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>music-fighter</title>
+    <meta charset=utf-8>
+    <meta name=description content="音乐挑战者">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcdn.net/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <style type="text/css">
+    * {
+        -webkit-user-select: none;
+        user-select: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        font-size: 16px;
+    }
+
+    body {
+        background: linear-gradient(-90deg, #29bdd9, #276ace);
+        height: 100vh;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+
+    #menu {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: space-around;
+        text-align: center;
+        color: white;
+        font-size: 1rem;
+    }
+
+    .menu-btn {
+        border: 1px solid white;
+        border-radius: 50%;
+        width: 75px;
+        height: 75px;
+        line-height: 75px;
+    }
+
+    .music-btn {
+        border-radius: 50%;
+        width: 5vh;
+        padding: 1vh;
+        font-size: 5vh;
+        text-align: center;
+        margin: 1.5vh;
+    }
+
+    #gameBoard,
+    #gameControl {
+        display: none;
+    }
+
+    #gameBoard {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #gameControl {
+        text-align: center;
+        color: white;
+        font-size: 1rem;
+        padding: 30px;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    #inputSeq {
+        margin-bottom: 5px;
+        border: 1px solid #fff;
+        padding: 5px;
+    }
+
+    #inputSeq span {
+        margin: 0 5px;
+        font-size: 5vw;
+    }
+
+    #inputSeq .curr {
+        font-size: 7vw;
+        color: yellow;
+    }
+
+    #returnBtn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+    </style>
+</head>
+
+<body>
+    <!-- 游戏面板 -->
+    <div id="gameBoard">
+    </div>
+    <!-- 游戏控制板 -->
+    <div id="gameControl">
+        <div id="inputSeq"></div>
+        <div id="returnBtn">返回</div>
+    </div>
+    <!-- 游戏菜单 -->
+    <div id="menu">
+        <div id="easyBtn" class="menu-btn animated" data-btn-num="7">简单</div>
+        <div id="mediumBtn" class="menu-btn animated" data-btn-num="14">中等</div>
+        <div id="hardBtn" class="menu-btn animated" data-btn-num="21">困难</div>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.slim.min.js"></script>
+    <script type="text/javascript">
+    const MAX_GRID_NUM = 28; // 最大网格数
+    let btnNum; // 根据难度决定显示的按钮数
+    // 要显示的按钮样式
+    const btnTexts = ['🐔', '🐖', '🐟', '🐑', '🦆', '🐧', '🐭',
+        '🐂', '🐯', '🐰', '🐉', '🐍', '🐎', '🐵',
+        '🐶', '🐘', '🐊', '🦖', '🦌', '🐿', '🐨',
+        '🐻', '🐙', '🦑', '🦈', '🐬', '🐋', '🍗',
+        '🐡', '🐥', '🐫', '🦇', '💩', '🦊', '🦔',
+        '🐲', '🥚', '🦂', '🐀', '🦏', '🐦'
+    ];
+    $(() => {
+        $('.menu-btn').on('touchstart', function() {
+            btnNum = $(this).attr('data-btn-num'); // 简单
+            $(this).addClass('swing');
+            setTimeout(() => {
+                startGame();
+                $(this).removeClass('swing');
+            }, 1000);
+        });
+        $('#returnBtn').click(function() {
+            exitGame();
+        });
+        // 开始游戏
+        function startGame() {
+            $('#menu').hide();
+            $('#gameBoard, #gameControl').show();
+            // 目标输入
+            const goalInput = [1, 2, 3, 5, 7, 4, 6, 7];
+            let pos = 0;
+            let output = `<span class="curr">${goalInput[0]}</span>`;
+            for(let i = 1; i < goalInput.length; i++) {
+                output += `<span>${goalInput[i]}</span>`;
+            }
+            $('#inputSeq').html(output);
+            // 实际输入
+            const myInput = [];
+            const textNum = btnTexts.length;
+            const showBtns = [];
+            for (let i = 0; i < MAX_GRID_NUM; i++) {
+                $('#gameBoard').append(`<div class="music-btn animated"></div>`);
+            }
+            for (let i = 0; i < btnNum; i++) {
+                $('#gameBoard').append(`<audio class="music" src="./music${i + 1}.wav"></audio>`);
+            }
+
+            const selectedBtnTexts = [...btnTexts]; // 被选中的按钮样式
+            const showGrids = Array.from(Array(MAX_GRID_NUM), (v, idx) => idx); // 要展示按钮的格子
+            // 随机排序
+            shuffle(selectedBtnTexts);
+            shuffle(showGrids);
+            const $allInputSpan = $('#inputSeq span');
+            for (let i = 0; i < btnNum; i++) {
+                const $musicBtn = $($('.music-btn')[showGrids[i]]);
+                $musicBtn.html(selectedBtnTexts[i] + (i + 1)); 
+                $musicBtn.on('touchstart', function() {
+                    $('.music')[i].play();
+                    $(this).addClass('tada');
+                    setTimeout(() => {
+                        $(this).removeClass('tada');
+                    }, 1000);
+                    myInput.push(i + 1);
+                    // 弹对了
+                    if (i + 1 === goalInput[pos]) {
+                        $($allInputSpan[pos]).removeClass('curr');
+                        $($allInputSpan[++pos]).addClass('curr');
+                        if (pos >= goalInput.length) {
+                            $('#inputSeq').html('恭喜通关，贼牛逼');
+                        }
+                    }
+                })
+            }
+        }
+        // 退出游戏
+        function exitGame() {
+            $('#gameBoard, #gameControl').hide();
+            $('#menu').show();
+            $('#gameBoard').empty();
+            $('#inputSeq').empty();
+        }
+    });
+    // 随机排序
+    function shuffle(arr) {
+        let i = arr.length;
+        while (i) {
+            let j = Math.floor(Math.random() * i--);
+            [arr[j], arr[i]] = [arr[i], arr[j]];
+        }
+    }
+    </script>
+</body>
+
+</html>
