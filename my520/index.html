@@ -4149,12 +4149,12 @@
         </div>
     </div>
     <script>
-    	let allLinks = document.getElementsByTagName("a");
-    	for (var i = 0; i < allLinks.length; i++) {
-    		allLinks[i].href = "javascript:;"
-    		allLinks[i].target = "_self";
-    		allLinks[i].onclick = () => {alert('你想跑去哪里，乖乖搜索！')};
-    	}
+      let allLinks = document.getElementsByTagName("a"); // 选取所有超链接
+      for (var i = 0; i < allLinks.length; i++) {
+        allLinks[i].href = "javascript:;" // 防止跳转
+        allLinks[i].target = "_self"; // 不弹出新窗口
+        allLinks[i].onclick = () => {alert('你想跑去哪里，乖乖搜索！')}; // 绑定点击事件，弹出提示
+      }
     </script>
 </body>
 
