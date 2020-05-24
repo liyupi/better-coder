@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0,user-scalable=no,minimal-ui">
+    <title>鱼皮-视频转字符画</title>
+    <style type="text/css">
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        user-select: none;
+    }
+
+    #videoWrapper {
+        height: 100vh;
+    }
+
+    #videoWrapper video,
+    canvas {
+        width: 50%;
+        float: left;
+        height: 100%;
+    }
+
+    #originVideo {
+        display: none;
+    }
+
+    #fileWrapper {
+        width: 50%;
+        float: left;
+        background-image: linear-gradient(135deg, #ABDCFF 10%, #0396FF 100%);
+        font-size: 6rem;
+        line-height: 100vh;
+        text-align: center;
+        color: #fff;
+        height: 100vh;
+        z-index: 100;
+    }
+
+    #file {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100vh;
+        opacity: 0;
+    }
+
+    @media screen and (max-width: 768px) {
+        #videoWrapper video, canvas, #fileWrapper, #file {
+            width: 100%;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    <div id="videoWrapper">
+        <div id="fileWrapper">
+            + MP4
+        </div>
+        <video id="originVideo" src=""></video>
+        <canvas id="charVideoCanvas"></canvas>
+        <input type="file" id="file" accept="video/*">
+    </div>
+    <script type="text/javascript" src="charVideo.js"></script>
+    <script type="text/javascript">
+        // use
+    	new CharVideo();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+.now
+.vercel
+.idea
+dist
+node_modules
+.DS_Store
+**/.now
+**/.vercel
+**/.idea
+**/dist
+**/node_modules
+**/.DS_Store
