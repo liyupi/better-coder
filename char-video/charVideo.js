@@ -96,12 +96,13 @@ CharVideo.prototype.interval = function() {
 // 选择文件事件
 CharVideo.prototype.initEvent = function() {
     var that = this;
-    this.fileInput.onchange = function() {
+    this.fileInput.onchange = function(e) {
         var filename = this.value;
         var index = filename.lastIndexOf(".");
         var ext = filename.substr(index + 1);
-        if (ext == "mp4") {
+        if (ext === "mp4") {
             that.initFile();
+            e.target.value = null;
         } else {
             alert("仅支持MP4格式");
         }
