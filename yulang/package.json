@@ -1,0 +1,9 @@
+{
+  "name": "yulang",
+  "version": "1.0.0",
+  "scripts": {
+    "doc": "node core/doc.js",
+    "validate": "node core/map.js"
+  },
+  "dependencies": {}
+}
