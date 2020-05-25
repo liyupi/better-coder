@@ -9,7 +9,7 @@
 
 ## 使用
 1. 下载yulang代码
-1. 在src目录下新增yu文件（如test.yu），进行开发
+1. 在src目录下可以开发yu文件（如test.yu），也可以使用反编译命令生成.yu（下面有介绍）
 1. 开发完成，运行yulang.sh脚本，将无后缀文件名作为参数
 ```bash
     ./yulang.sh test
@@ -40,5 +40,7 @@
 - yulang.sh 执行脚本
 
 ## 贡献
+欢迎贡献！
 
+可以修改core/map.js新增表情 => 关键字映射，并用 `npm run validate` 命令校验合法性。
 
