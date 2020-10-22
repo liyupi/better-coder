@@ -13,3 +13,4 @@
 1. 自动敲代码网站 auto_code_printer.html
 1. WoW特效-生日网站 cake.html
 1. Js编码表情字符 aaencode.html
+1. 极简计算器 calculator.html

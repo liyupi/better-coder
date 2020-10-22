@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>计算器</title>
+  <meta charset="utf-8">
+  <style>
+    body {
+      padding: 20px;
+      user-select: none;
+    }
+
+    #wrapper {
+      width: 320px;
+    }
+
+    #result {
+      height: 100px;
+      border: 1px solid #ddd;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .row {
+      display: flex;
+      column-count: 3;
+    }
+
+    .row button {
+      padding: 20px;
+      flex: 1;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      background: #eee;
+    }
+  </style>
+</head>
+
+<body>
+<div id="wrapper">
+  <div id="result"></div>
+  <div class="row">
+    <button>+</button>
+    <button>-</button>
+    <button id="ac">AC</button>
+  </div>
+  <div class="row">
+    <button>/</button>
+    <button>*</button>
+    <button id="getResult">=</button>
+  </div>
+  <div class="row">
+    <button>7</button>
+    <button>8</button>
+    <button>9</button>
+  </div>
+  <div class="row">
+    <button>4</button>
+    <button>5</button>
+    <button>6</button>
+  </div>
+  <div class="row">
+    <button>1</button>
+    <button>2</button>
+    <button>3</button>
+  </div>
+  <div class="row">
+    <button>%</button>
+    <button>0</button>
+    <button>.</button>
+  </div>
+</div>
+</body>
+<script>
+  let buttonObjs = document.getElementsByTagName("button");
+  let resultObj = document.getElementById("result");
+  let acObj = document.getElementById("ac");
+  let getResultObj = document.getElementById("getResult");
+  for (const buttonObj of buttonObjs) {
+    if (!['AC', '='].includes(buttonObj.innerHTML)) {
+      buttonObj.addEventListener('click', () => {
+        resultObj.innerHTML += buttonObj.innerHTML;
+      })
+    }
+  }
+  acObj.addEventListener('click', () => {
+    resultObj.innerHTML = '';
+  })
+  getResultObj.addEventListener('click', () => {
+    resultObj.innerHTML = eval(resultObj.innerHTML);
+  })
+</script>
+</html>
