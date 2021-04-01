@@ -2,10 +2,11 @@
 > 一些有趣的前端小项目，可以按照目录分别使用
 
 ## 目录
-1. 读书笔记 read-note
+1. 编程昵称生成器 fuck-name（Vue + ElementUI）
+1. 读书笔记 read-note（Svelte）
 1. Yulang-鱼编程语言 yulang
 1. 视频转字符画 char-video
-1. 上海应届落户积分计算器 can-i-settle-shanghai
+1. 上海应届落户积分计算器 can-i-settle-shanghai（Vue + VantUI）
 1. 小游戏-音乐战士 music-fighter
 1. 520表白网站 my520
 1. 全屏樱花特效 sakura
