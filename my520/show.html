@@ -101,14 +101,14 @@
 </div>
 <canvas class="canvas" width="1820" height="905"></canvas>
 <p class="text" style="color: #ed3073;">
-    We fell in love！
+    新年快乐
     <br/>
     <span id="span_dt_dt"></span>
 </p>
 <script language="javascript">
     function show_date_time() {
         window.setTimeout("show_date_time()", 1000);
-        BirthDay = new Date("1/20/2018 00:00:00"); //这个日期是可以修改的
+        BirthDay = new Date("1/31/2022 21:09:00"); //这个日期是可以修改的
         today = new Date();
         timeold = (today.getTime() - BirthDay.getTime());
         sectimeold = timeold / 1000
@@ -132,7 +132,7 @@
             S.Drawing.init('.canvas');
             document.body.classList.add('body--ready');
             //想说的话
-            S.UI.simulate("{{被表白人}}|I'm|{{表白者}}|Nice|to|Meet|You|#countdown 3|#time");
+            S.UI.simulate("{{吕典琳}}|I'm|{{wkk}}|Nice|to|Meet|You|#countdown 3|#time");
             S.Drawing.loop(function () {
                 S.Shape.render();
             });
