@@ -58,6 +58,7 @@
 1. WoW特效-生日网站 cake.html
 1. Js编码表情字符 aaencode.html
 1. 极简计算器 calculator.html
+2. 自定义 live2d 看板娘 live2d-widget
 
 ### 文章
 
@@ -189,8 +190,6 @@
 [阿巴阿巴阿巴](http://mp.weixin.qq.com/s?__biz=MzI1NDczNTAwMA==&mid=2247492957&idx=1&sn=ad214bddcfa79ea3f08cb34941adeed6&chksm=e9c202aadeb58bbcdf69ca3bda4affc0a2a459c57e4519077717f808bdb0f126165eded43f90#rd)
 
 [Java 开发者鱼皮每天都干啥？](http://mp.weixin.qq.com/s?__biz=MzI1NDczNTAwMA==&mid=2247493000&idx=1&sn=145cb8e58254767c3a66780def7ed75a&chksm=e9c2027fdeb58b69300681c243af12e07f2670326b1cfa856e0434be42f7f5a414ebe224648e#rd)
-
-[我们的宝宝来啦！🧧🧧🧧](http://mp.weixin.qq.com/s?__biz=MzI1NDczNTAwMA==&mid=2247494665&idx=1&sn=a1357177a6a78e780e1b8336bfca5421&chksm=e9c20bfedeb582e801e9fe6c0983cd3cc520aaf57731d35dbfd3c9155bb15675a6f3894604b9#rd)
 
 [聊聊最近的生活](http://mp.weixin.qq.com/s?__biz=MzI1NDczNTAwMA==&mid=2247493379&idx=1&sn=2dd40dac552b3415438b77404d3da082&chksm=e9c200f4deb589e217d24726c480f944c54df667a300ac7c096c765fbfa8e871f6d2f42f2bbb#rd)
 
