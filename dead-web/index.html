@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字墓园 | Digital Cemetery - 互联网历史的见证者</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%);
+            color: #d0d0d0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .cemetery-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 10% 30%, rgba(139, 69, 19, 0.15) 0%, transparent 40%),
+                radial-gradient(ellipse at 90% 70%, rgba(75, 0, 130, 0.12) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 90%, rgba(40, 40, 40, 0.2) 0%, transparent 60%),
+                linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
+            z-index: -3;
+        }
+
+
+
+        .section-header-decoration {
+            position: relative;
+            margin: 40px 0 30px;
+            text-align: center;
+        }
+
+
+
+
+        
+        .cemetery-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(255, 140, 0, 0.02) 0%, transparent 30%),
+                radial-gradient(circle at 85% 75%, rgba(255, 140, 0, 0.02) 0%, transparent 30%),
+                radial-gradient(circle at 50% 10%, rgba(255, 140, 0, 0.015) 0%, transparent 25%);
+            animation: candleFlicker 4s ease-in-out infinite alternate;
+        }
+        
+        .fog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top, rgba(255,255,255,0.02) 0%, transparent 70%),
+                radial-gradient(ellipse at bottom, rgba(128,128,128,0.03) 0%, transparent 70%);
+            z-index: -1;
+            animation: drift 20s ease-in-out infinite alternate;
+        }
+        
+        @keyframes drift {
+            0% { transform: translateX(-2px) translateY(-2px); }
+            100% { transform: translateX(2px) translateY(2px); }
+        }
+        
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: twinkle 4s infinite alternate;
+        }
+        
+        .star:nth-child(1) { width: 3px; height: 3px; top: 20%; left: 25%; animation-delay: 0s; }
+        .star:nth-child(2) { width: 4px; height: 4px; top: 35%; left: 80%; animation-delay: 1s; }
+        .star:nth-child(3) { width: 3.5px; height: 3.5px; top: 55%; left: 15%; animation-delay: 2s; }
+        .star:nth-child(4) { width: 3px; height: 3px; top: 75%; left: 70%; animation-delay: 3s; }
+        .star:nth-child(5) { width: 4px; height: 4px; top: 45%; left: 90%; animation-delay: 0.5s; }
+        .star:nth-child(6) { width: 3.5px; height: 3.5px; top: 65%; left: 40%; animation-delay: 1.5s; }
+        .star:nth-child(7) { width: 3px; height: 3px; top: 85%; left: 10%; animation-delay: 2.5s; }
+        .star:nth-child(8) { width: 4px; height: 4px; top: 25%; left: 55%; animation-delay: 3.5s; }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.05; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.05); }
+            100% { opacity: 0.1; transform: scale(1); }
+        }
+        
+        @keyframes candleFlicker {
+            0% { opacity: 0.8; }
+            25% { opacity: 0.9; }
+            50% { opacity: 0.7; }
+            75% { opacity: 0.95; }
+            100% { opacity: 0.85; }
+        }
+        
+
+        
+        header {
+            text-align: center;
+            padding: 40px 20px 40px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid #333;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .header-cemetery {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        .grave-illustration {
+            position: absolute;
+            top: 20%;
+            transform: translateY(-50%);
+            animation: sway 6s ease-in-out infinite alternate;
+        }
+        
+        .left-grave {
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .right-grave {
+            right: 5%;
+            animation-delay: 0s;
+        }
+        
+        @keyframes sway {
+            0% { transform: translateY(-50%) rotate(-1deg); }
+            100% { transform: translateY(-50%) rotate(1deg); }
+        }
+        
+
+        
+        .site-title {
+            font-family: 'Creepster', cursive;
+            font-size: 3.5rem;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+            margin-bottom: 10px;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(255, 107, 107, 0.5); }
+            to { text-shadow: 0 0 30px rgba(255, 107, 107, 0.8), 0 0 40px rgba(255, 107, 107, 0.3); }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #bbb;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px 25px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            padding: 15px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(20,20,20,0.6) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .filter-group {
+            display: inline-flex;
+            margin: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 18px;
+            padding: 3px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .filter-btn {
+            padding: 6px 12px;
+            border: none;
+            background: transparent;
+            color: #ccc;
+            cursor: pointer;
+            border-radius: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+        
+        .filter-btn.active {
+            background: #ff6b6b;
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .search-box {
+            margin: 10px auto;
+            max-width: 350px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(0,0,0,0.3);
+            color: #fff;
+            border-radius: 22px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .search-input::placeholder {
+            color: #aaa;
+        }
+        
+        .search-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.2);
+        }
+        
+        .timeline {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .year-section {
+            margin-bottom: 60px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .year-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #444;
+        }
+        
+        .year-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff6b6b;
+            margin-right: 20px;
+        }
+        
+        .year-count {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tombstone {
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: 0.3;
+        }
+        
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .site-card {
+            background: linear-gradient(135deg, rgba(40,40,40,0.3) 0%, rgba(20,20,20,0.5) 100%);
+            border: 1px solid rgba(80,80,80,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .site-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff6b6b, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .site-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        .site-card:hover::before {
+            opacity: 1;
+        }
+        
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .site-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .site-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .site-details {
+            flex: 1;
+        }
+        
+        .site-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        
+        .site-url {
+            font-size: 0.9rem;
+            color: #888;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .site-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 60px;
+        }
+        
+        .badge.website { background: rgba(74, 144, 226, 0.2); color: #4a90e2; }
+        .badge.app { background: rgba(80, 227, 194, 0.2); color: #50e3c2; }
+        .badge.service { background: rgba(255, 195, 0, 0.2); color: #ffc300; }
+        .badge.domestic { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .badge.international { background: rgba(108, 99, 255, 0.2); color: #6c63ff; }
+        
+        .site-description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        
+        .site-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .death-date {
+            font-weight: 500;
+            color: #ff6b6b;
+        }
+        
+        .category-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+        
+
+        
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .cemetery-footer-decoration {
+            margin-top: 60px;
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .grave-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            animation: sway 8s ease-in-out infinite alternate;
+        }
+
+        .grave-icon {
+            font-size: 1.8rem;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .grave-icon:hover {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        @keyframes sway {
+            0% { transform: translateX(-2px); }
+            100% { transform: translateX(2px); }
+        }
+
+        .epitaph {
+            color: #999;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .epitaph p {
+            margin: 5px 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid #333;
+            margin-top: 0;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .data-sources {
+            margin-bottom: 30px;
+        }
+        
+        .data-sources h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .sources-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .source-link {
+            color: #888;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .source-link:hover {
+            color: #ff6b6b;
+            border-color: rgba(255, 107, 107, 0.3);
+        }
+        
+        .copyright {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .site-title {
+                font-size: 2.5rem;
+            }
+
+            .stats {
+                gap: 20px;
+            }
+
+            .filter-group {
+                margin: 5px;
+            }
+
+            .sites-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tombstone {
+                display: none;
+            }
+            
+            .sources-list {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .loading::after {
+            content: '⚰️';
+            font-size: 2rem;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cemetery-bg"></div>
+    <div class="fog"></div>
+    
+    <!-- 背景光点 -->
+    <div class="starfield">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+    
+
+    
+
+
+    
+    <header>
+        <!-- 头部坟墓装饰 -->
+        <div class="header-cemetery">
+                        <div class="grave-illustration left-grave">
+                <svg width="180" height="240" viewBox="0 0 60 80" fill="none">
+                    <path d="M15 70H45V75H15V70Z" fill="#2a2a2a"/>
+                    <path d="M20 20H40V65H20V20Z" fill="#3a3a3a"/>
+                    <path d="M25 10H35V60H25V10Z" fill="#444"/>
+                    <path d="M27 15H33V25H27V15Z" fill="#555"/>
+                    <circle cx="30" cy="40" r="8" fill="#333"/>
+                    <text x="30" y="45" text-anchor="middle" fill="#666" font-size="10">RIP</text>
+                </svg>
+            </div>
+            
+            <div class="grave-illustration right-grave">
+                <svg width="180" height="240" viewBox="0 0 60 80" fill="none">
+                    <path d="M15 70H45V75H15V70Z" fill="#2a2a2a"/>
+                    <path d="M20 20H40V65H20V20Z" fill="#3a3a3a"/>
+                    <ellipse cx="30" cy="25" rx="10" ry="8" fill="#444"/>
+                    <path d="M20 25H40V65H20V25Z" fill="#444"/>
+                    <circle cx="30" cy="45" r="6" fill="#333"/>
+                    <text x="30" y="49" text-anchor="middle" fill="#666" font-size="8">2025</text>
+                </svg>
+            </div>
+                    </div>
+
+        <h1 class="site-title">数字墓园</h1>
+        <p class="subtitle">纪念那些曾经辉煌的互联网产品</p>
+        
+        
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalSites">0</div>
+                <div class="stat-label">已逝网站/应用</div>
+                        </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalYears">24</div>
+                <div class="stat-label">记录年份</div>
+                    </div>
+            <div class="stat-item">
+                <div class="stat-number" id="domesticSites">0</div>
+                <div class="stat-label">国内产品</div>
+                </div>
+            <div class="stat-item">
+                <div class="stat-number" id="internationalSites">0</div>
+                <div class="stat-label">国外产品</div>
+            </div>
+                        </div>
+    </header>
+    
+    <div class="controls">
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="website">网站</button>
+            <button class="filter-btn" data-filter="app">应用</button>
+            <button class="filter-btn" data-filter="service">服务</button>
+                    </div>
+
+        <div class="filter-group">
+            <button class="filter-btn active" data-region="all">全球</button>
+            <button class="filter-btn" data-region="domestic">国内</button>
+            <button class="filter-btn" data-region="international">国外</button>
+                    </div>
+
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="搜索已逝的网站或应用..." id="searchInput">
+                        </div>
+                    </div>
+    
+    <main class="timeline" id="timeline">
+        <div class="loading">正在加载数字墓园...</div>
+    </main>
+    
+    <!-- 底部墓地装饰 -->
+    <div class="cemetery-footer-decoration">
+        <div class="grave-row">
+            <span class="grave-icon">🪦</span>
+            <span class="grave-icon">⚰️</span>
+            <span class="grave-icon">🕯️</span>
+            <span class="grave-icon">🌹</span>
+            <span class="grave-icon">💀</span>
+            <span class="grave-icon">🌹</span>
+            <span class="grave-icon">🕯️</span>
+            <span class="grave-icon">⚰️</span>
+            <span class="grave-icon">🪦</span>
+                        </div>
+        <div class="epitaph">
+            <p>愿逝去的数字产品安息 🙏</p>
+            <p>May the departed digital products rest in peace</p>
+                    </div>
+                        </div>
+
+    <footer>
+            <div class="footer-content">
+            <div class="data-sources">
+                <h3>数据来源</h3>
+                <div class="sources-list">
+                    <a href="https://indieweb.org/site-deaths" class="source-link" target="_blank">IndieWeb</a>
+                    <a href="https://www.saashub.com/product-graveyard" class="source-link" target="_blank">SaaSHub</a>
+                    <a href="https://killedby.tech/" class="source-link" target="_blank">Killed by Tech</a>
+                    <a href="https://shutdownlikeaboss.com/" class="source-link" target="_blank">Shutdown Like A Boss</a>
+                </div>
+                </div>
+            <p class="copyright">© 2025 数字墓园 | 让逝去的互联网产品永远被铭记 | 数据截止到 2025 年 1 月</p>
+        </div>
+    </footer>
+
+    <script>
+        // 从IndieWeb site-deaths等来源整理的数据
+        const deadSites = [
+            // 2024年倒闭的网站/应用
+            {
+                name: "Cohost",
+                url: "cohost.org",
+                type: "website",
+                region: "international",
+                category: "社交网络",
+                description: "一个专注于创作者的社交平台，承诺不使用算法推荐，最终因无法维持运营而关闭。",
+                deathDate: "2024-10-01",
+                year: 2024
+            },
+            {
+                name: "8tracks",
+                url: "8tracks.com",
+                type: "website",
+                region: "international", 
+                category: "音乐流媒体",
+                description: "在线音乐混合和流媒体服务，曾经深受DJ和音乐爱好者喜爱。",
+                deathDate: "2024-12-23",
+                year: 2024
+            },
+            {
+                name: "Mozilla.social",
+                url: "mozilla.social",
+                type: "service",
+                region: "international",
+                category: "社交网络",
+                description: "Mozilla运营的Mastodon实例，最终因战略调整而关闭。",
+                deathDate: "2024-12-17",
+                year: 2024
+            },
+            {
+                name: "Post News",
+                url: "post.news",
+                type: "website",
+                region: "international",
+                category: "社交媒体",
+                description: "试图成为Twitter替代品的社交新闻平台。",
+                deathDate: "2024-05-31",
+                year: 2024
+            },
+            {
+                name: "TinyLetter",
+                url: "tinyletter.com",
+                type: "service",
+                region: "international",
+                category: "邮件服务",
+                description: "Mailchimp旗下的简单newsletter服务，被整合到主平台中。",
+                deathDate: "2024-02-29",
+                year: 2024
+            },
+
+            // 2023年倒闭的网站/应用
+            {
+                name: "Blogs.Harvard",
+                url: "blogs.harvard.edu",
+                type: "website",
+                region: "international",
+                category: "博客平台",
+                description: "哈佛大学的博客平台，现已转为只读存档。",
+                deathDate: "2023-07-31",
+                year: 2023
+            },
+            {
+                name: "Ello",
+                url: "ello.co",
+                type: "website",
+                region: "international",
+                category: "社交网络",
+                description: "曾经被誉为Facebook替代品的无广告社交网络。",
+                deathDate: "2023-07-18",
+                year: 2023
+            },
+            {
+                name: "IRL",
+                url: "irl.com",
+                type: "app",
+                region: "international",
+                category: "社交网络",
+                description: "号称是现实生活中的社交网络，因大量机器人用户而关闭。",
+                deathDate: "2023-06-27",
+                year: 2023
+            },
+            {
+                name: "Revue",
+                url: "getrevue.co",
+                type: "service",
+                region: "international",
+                category: "邮件服务",
+                description: "被Twitter收购的newsletter服务，随Twitter变化而关闭。",
+                deathDate: "2023-01-18",
+                year: 2023
+            },
+
+            // 2022年倒闭的网站/应用
+            {
+                name: "Reading.am",
+                url: "reading.am",
+                type: "website",
+                region: "international",
+                category: "阅读工具",
+                description: "个人书签和阅读管理服务，代码已开源。",
+                deathDate: "2022-06-30",
+                year: 2022
+            },
+            {
+                name: "Kinja个人页面",
+                url: "kinja.com",
+                type: "website",
+                region: "international",
+                category: "博客平台",
+                description: "G/O Media旗下的个人博客页面服务。",
+                deathDate: "2022-12-08",
+                year: 2022
+            },
+
+            // 2021年倒闭的网站/应用
+            {
+                name: "Spectrum.chat",
+                url: "spectrum.chat",
+                type: "website",
+                region: "international",
+                category: "社区平台",
+                description: "被微软收购的开发者社区平台，功能迁移到GitHub Discussions。",
+                deathDate: "2021-08-31",
+                year: 2021
+            },
+            {
+                name: "Google App Maker",
+                url: "appmaker.google.com",
+                type: "service",
+                region: "international",
+                category: "开发工具",
+                description: "Google的低代码应用开发平台，因使用率低而关闭。",
+                deathDate: "2021-01-19",
+                year: 2021
+            },
+
+            // 2020年倒闭的网站/应用
+            {
+                name: "Yahoo Groups",
+                url: "groups.yahoo.com",
+                type: "service",
+                region: "international",
+                category: "社区平台",
+                description: "曾经最大的在线社区和邮件列表服务，承载了无数互联网早期记忆。",
+                deathDate: "2020-12-18",
+                year: 2020
+            },
+            {
+                name: "Firefox Send",
+                url: "send.firefox.com",
+                type: "service",
+                region: "international",
+                category: "文件分享",
+                description: "Mozilla的加密文件分享服务，因安全问题而关闭。",
+                deathDate: "2020-09-17",
+                year: 2020
+            },
+            {
+                name: "Mixer",
+                url: "mixer.com",
+                type: "website",
+                region: "international",
+                category: "直播平台",
+                description: "微软的游戏直播平台，用户迁移到Facebook Gaming。",
+                deathDate: "2020-07-22",
+                year: 2020
+            },
+            {
+                name: "Wunderlist",
+                url: "wunderlist.com",
+                type: "app",
+                region: "international",
+                category: "效率工具",
+                description: "深受喜爱的待办事项应用，被微软收购后迁移到Microsoft To-Do。",
+                deathDate: "2020-05-06",
+                year: 2020
+            },
+            {
+                name: "soup.io",
+                url: "soup.io",
+                type: "website",
+                region: "international",
+                category: "微博客",
+                description: "德国的微博客平台，'blogging from the rest of us'的口号曾经很受欢迎。",
+                deathDate: "2020-07-17",
+                year: 2020
+            },
+            {
+                name: "TinyCards",
+                url: "tinycards.duolingo.com",
+                type: "app",
+                region: "international",
+                category: "教育工具",
+                description: "Duolingo的记忆卡片应用，帮助用户学习语言和知识。",
+                deathDate: "2020-09-01",
+                year: 2020
+            },
+
+            // 2019年倒闭的网站/应用
+            {
+                name: "Google+",
+                url: "plus.google.com",
+                type: "website",
+                region: "international",
+                category: "社交网络",
+                description: "Google的社交网络尝试，最终败给了Facebook和Twitter。",
+                deathDate: "2019-04-02",
+                year: 2019
+            },
+            {
+                name: "Mozilla Thimble",
+                url: "thimble.mozilla.org",
+                type: "website",
+                region: "international",
+                category: "教育工具",
+                description: "Mozilla的在线代码编辑器，帮助学习者学习HTML、CSS和JavaScript。",
+                deathDate: "2019-12-18",
+                year: 2019
+            },
+            {
+                name: "goo.gl",
+                url: "goo.gl",
+                type: "service",
+                region: "international",
+                category: "工具服务",
+                description: "Google的URL短链接服务，被YouTube短链接等服务替代。",
+                deathDate: "2019-03-30",
+                year: 2019
+            },
+
+            // 2018年倒闭的网站/应用
+            {
+                name: "Path",
+                url: "path.com",
+                type: "app",
+                region: "international",
+                category: "社交网络",
+                description: "专注于亲密朋友圈的私密社交应用，一度被视为Facebook的有力竞争者。",
+                deathDate: "2018-10-18",
+                year: 2018
+            },
+            {
+                name: "StumbleUpon",
+                url: "stumbleupon.com",
+                type: "website",
+                region: "international",
+                category: "内容发现",
+                description: "互联网内容发现的先驱，帮助用户发现有趣的网页内容。",
+                deathDate: "2018-06-30",
+                year: 2018
+            },
+            {
+                name: "Yahoo Messenger",
+                url: "messenger.yahoo.com",
+                type: "app",
+                region: "international",
+                category: "即时通讯",
+                description: "曾经与MSN、QQ并列的三大即时通讯工具之一。",
+                deathDate: "2018-07-17",
+                year: 2018
+            },
+            {
+                name: "Klout",
+                url: "klout.com",
+                type: "website",
+                region: "international",
+                category: "社交分析",
+                description: "社交媒体影响力评分平台，曾经是社交媒体营销的重要工具。",
+                deathDate: "2018-05-25",
+                year: 2018
+            },
+
+            // 2017年倒闭的网站/应用
+            {
+                name: "AIM (AOL Instant Messenger)",
+                url: "aim.com",
+                type: "app",
+                region: "international",
+                category: "即时通讯",
+                description: "美国在线的即时通讯软件，90年代互联网聊天的回忆。",
+                deathDate: "2017-12-15",
+                year: 2017
+            },
+            {
+                name: "App.net",
+                url: "app.net",
+                type: "website",
+                region: "international",
+                category: "社交网络",
+                description: "付费的Twitter替代品，主张无广告的社交体验。",
+                deathDate: "2017-03-14",
+                year: 2017
+            },
+            {
+                name: "Vine",
+                url: "vine.co",
+                type: "app",
+                region: "international",
+                category: "短视频",
+                description: "6秒短视频的鼻祖，启发了后来的TikTok等短视频平台。",
+                deathDate: "2017-01-17",
+                year: 2017
+            },
+
+            // 2016年倒闭的网站/应用
+            {
+                name: "Orkut",
+                url: "orkut.com",
+                type: "website",
+                region: "international",
+                category: "社交网络",
+                description: "Google早期的社交网络，在巴西和印度曾经非常流行。",
+                deathDate: "2016-09-30",
+                year: 2016
+            },
+            {
+                name: "Yo",
+                url: "yo.com",
+                type: "app",
+                region: "international",
+                category: "社交通讯",
+                description: "只能发送'Yo'的极简通讯应用，曾经融资千万美元。",
+                deathDate: "2016-12-31",
+                year: 2016
+            },
+
+            // 2015年倒闭的网站/应用
+            {
+                name: "Google Reader",
+                url: "reader.google.com",
+                type: "service",
+                region: "international",
+                category: "RSS阅读",
+                description: "最受欢迎的RSS阅读器，其关闭标志着RSS时代的结束。",
+                deathDate: "2013-07-01",
+                year: 2013
+            },
+            {
+                name: "FriendFeed",
+                url: "friendfeed.com",
+                type: "website",
+                region: "international",
+                category: "社交聚合",
+                description: "社交媒体聚合平台，被Facebook收购后逐渐衰落。",
+                deathDate: "2015-04-09",
+                year: 2015
+            },
+
+            // 国内网站/应用
+            {
+                name: "人人网",
+                url: "renren.com",
+                type: "website",
+                region: "domestic",
+                category: "社交网络",
+                description: "中国版Facebook，承载了80后90后的青春回忆，2024年12月2日正式停止服务。",
+                deathDate: "2024-12-02",
+                year: 2024
+            },
+            {
+                name: "开心网",
+                url: "kaixin001.com",
+                type: "website",
+                region: "domestic",
+                category: "社交游戏",
+                description: "曾经风靡一时的社交游戏网站，'偷菜'游戏的发源地。",
+                deathDate: "2019-08-01",
+                year: 2019
+            },
+            {
+                name: "天涯社区",
+                url: "tianya.cn",
+                type: "website",
+                region: "domestic",
+                category: "社区论坛",
+                description: "中国最早的网络社区之一，孕育了无数网络文学和热点事件。",
+                deathDate: "2023-04-01",
+                year: 2023
+            },
+            {
+                name: "网易博客",
+                url: "blog.163.com",
+                type: "website",
+                region: "domestic",
+                category: "博客平台",
+                description: "网易旗下的博客服务，曾是中国最大的博客平台之一。",
+                deathDate: "2018-11-30",
+                year: 2018
+            },
+            {
+                name: "虾米音乐",
+                url: "xiami.com",
+                type: "app",
+                region: "domestic",
+                category: "音乐流媒体",
+                description: "阿里巴巴旗下的音乐流媒体服务，以音乐品味和发现功能著称。",
+                deathDate: "2021-02-05",
+                year: 2021
+            },
+
+
+            {
+                name: "新浪微群",
+                url: "q.weibo.com",
+                type: "service",
+                region: "domestic",
+                category: "社交网络",
+                description: "新浪微博早期的群组功能，类似于微信群的概念。",
+                deathDate: "2019-03-15",
+                year: 2019
+            },
+            {
+                name: "百度空间",
+                url: "hi.baidu.com",
+                type: "website",
+                region: "domestic",
+                category: "博客平台",
+                description: "百度推出的个人空间产品，曾经是中国重要的博客平台。",
+                deathDate: "2015-04-21",
+                year: 2015
+            },
+            {
+                name: "搜狐博客",
+                url: "blog.sohu.com",
+                type: "website",
+                region: "domestic",
+                category: "博客平台",
+                description: "搜狐旗下的博客服务，见证了中国博客时代的兴衰。",
+                deathDate: "2017-08-20",
+                year: 2017
+            },
+            {
+                name: "校内网",
+                url: "xiaonei.com",
+                type: "website",
+                region: "domestic",
+                category: "社交网络",
+                description: "人人网的前身，中国最早的校园社交网络，后来更名为人人网。",
+                deathDate: "2009-08-04",
+                year: 2009
+            },
+            {
+                name: "猫扑大杂烩",
+                url: "dzh.mop.com",
+                type: "website",
+                region: "domestic",
+                category: "社区论坛",
+                description: "猫扑网旗下的论坛社区，曾经是中国网络文化的重要发源地。",
+                deathDate: "2020-06-30",
+                year: 2020
+            },
+            {
+                name: "腾讯微博",
+                url: "t.qq.com",
+                type: "website",
+                region: "domestic",
+                category: "微博客",
+                description: "腾讯推出的微博产品，试图挑战新浪微博，最终败北。",
+                deathDate: "2020-09-28",
+                year: 2020
+            },
+            {
+                name: "网易LOFTER",
+                url: "lofter.com",
+                type: "website",
+                region: "domestic",
+                category: "轻博客",
+                description: "网易的轻博客产品，深受文艺青年喜爱，虽未完全关闭但已衰落。",
+                deathDate: "2022-12-31",
+                year: 2022
+            },
+            {
+                name: "点点网",
+                url: "diandian.com",
+                type: "website",
+                region: "domestic",
+                category: "轻博客",
+                description: "许朝军创立的轻博客平台，模仿Tumblr模式，最终未能成功。",
+                deathDate: "2016-04-14",
+                year: 2016
+            },
+            {
+                name: "街旁网",
+                url: "jiepang.com",
+                type: "website",
+                region: "domestic",
+                category: "LBS签到",
+                description: "中国版Foursquare，基于位置的签到社交网站。",
+                deathDate: "2016-03-31",
+                year: 2016
+            },
+            {
+                name: "嘀咕网",
+                url: "digu.com",
+                type: "website",
+                region: "domestic",
+                category: "微博客",
+                description: "中国最早的微博客平台之一，比新浪微博还要早。",
+                deathDate: "2014-12-31",
+                year: 2014
+            },
+            {
+                name: "饭否",
+                url: "fanfou.com",
+                type: "website",
+                region: "domestic",
+                category: "微博客",
+                description: "王兴创立的微博客平台，曾因政策原因关闭，后重新开放但已式微。",
+                deathDate: "2009-07-07",
+                year: 2009
+            },
+            {
+                name: "多说评论",
+                url: "duoshuo.com",
+                type: "service",
+                region: "domestic",
+                category: "社交插件",
+                description: "国内最大的社会化评论系统，为无数网站提供评论功能。",
+                deathDate: "2017-06-01",
+                year: 2017
+            },
+            {
+                name: "来往",
+                url: "laiwang.com",
+                type: "app",
+                region: "domestic",
+                category: "即时通讯",
+                description: "阿里巴巴推出的移动社交应用，试图挑战微信，最终失败。",
+                deathDate: "2016-09-30",
+                year: 2016
+            },
+            {
+                name: "易信",
+                url: "yixin.im",
+                type: "app",
+                region: "domestic",
+                category: "即时通讯",
+                description: "网易和中国电信合作推出的通讯应用，主打免费短信功能。",
+                deathDate: "2021-08-01",
+                year: 2021
+            },
+            {
+                name: "飞信",
+                url: "feixin.10086.cn",
+                type: "app",
+                region: "domestic",
+                category: "即时通讯",
+                description: "中国移动的即时通讯软件，曾经在移动用户中很受欢迎。",
+                deathDate: "2020-09-30",
+                year: 2020
+            },
+            {
+                name: "MSN中国",
+                url: "msn.com.cn",
+                type: "service",
+                region: "domestic",
+                category: "即时通讯",
+                description: "微软MSN在中国的本地化服务，随着微软战略调整而关闭。",
+                deathDate: "2014-10-31",
+                year: 2014
+            },
+            {
+                name: "51.com",
+                url: "51.com",
+                type: "website",
+                region: "domestic",
+                category: "社交网络",
+                description: "中国早期的SNS社交网站，曾经拥有大量用户。",
+                deathDate: "2019-12-31",
+                year: 2019
+            },
+            {
+                name: "chinaren校友录",
+                url: "chinaren.com",
+                type: "website",
+                region: "domestic",
+                category: "社交网络",
+                description: "中国最早的校友录网站，后被搜狐收购，见证了中国互联网早期发展。",
+                deathDate: "2013-07-01",
+                year: 2013
+            },
+            {
+                name: "快播",
+                url: "kuaibo.com",
+                type: "app",
+                region: "domestic",
+                category: "视频播放",
+                description: "曾经装机必备的视频播放器，因版权问题和涉黄内容被关闭。",
+                deathDate: "2014-04-22",
+                year: 2014
+            },
+            {
+                name: "暴风影音在线",
+                url: "baofeng.com",
+                type: "service",
+                region: "domestic",
+                category: "视频播放",
+                description: "暴风影音的在线视频服务，公司破产后服务终止。",
+                deathDate: "2019-12-31",
+                year: 2019
+            },
+            {
+                name: "土豆网",
+                url: "tudou.com",
+                type: "website",
+                region: "domestic",
+                category: "视频分享",
+                description: "中国早期的视频分享网站，口号'每个人都是生活的导演'，后被优酷合并。",
+                deathDate: "2017-04-01",
+                year: 2017
+            },
+            {
+                name: "56网",
+                url: "56.com",
+                type: "website",
+                region: "domestic",
+                category: "视频分享",
+                description: "人人网旗下的视频分享网站，以'我秀我拍'闻名。",
+                deathDate: "2018-02-28",
+                year: 2018
+            },
+            {
+                name: "酷6网",
+                url: "ku6.com",
+                type: "website",
+                region: "domestic",
+                category: "视频分享",
+                description: "搜狐旗下的视频网站，曾经是视频三强之一。",
+                deathDate: "2017-12-31",
+                year: 2017
+            },
+            {
+                name: "千千静听",
+                url: "ttplayer.com",
+                type: "app",
+                region: "domestic",
+                category: "音乐播放",
+                description: "经典的音乐播放器，后被百度收购更名为百度音乐。",
+                deathDate: "2013-07-01",
+                year: 2013
+            },
+            {
+                name: "酷狗繁星网",
+                url: "fanxing.kugou.com",
+                type: "service",
+                region: "domestic",
+                category: "在线K歌",
+                description: "酷狗旗下的在线K歌平台，后整合到酷狗直播中。",
+                deathDate: "2018-06-30",
+                year: 2018
+                         }
+        ];
+
+        // 全局变量
+        let currentFilter = 'all';
+        let currentRegion = 'all';
+        let searchTerm = '';
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFilters();
+            renderSites();
+            updateStats();
+            
+            // 添加搜索功能
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                searchTerm = e.target.value.toLowerCase();
+                renderSites();
+            });
+        });
+
+        // 初始化过滤器
+        function initializeFilters() {
+            // 类型过滤器
+            document.querySelectorAll('[data-filter]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderSites();
+                });
+            });
+
+            // 地区过滤器
+            document.querySelectorAll('[data-region]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-region]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentRegion = this.dataset.region;
+                    renderSites();
+                });
+            });
+        }
+
+        // 过滤网站数据
+        function filterSites() {
+            return deadSites.filter(site => {
+                // 类型过滤
+                const typeMatch = currentFilter === 'all' || site.type === currentFilter;
+                
+                // 地区过滤
+                const regionMatch = currentRegion === 'all' || site.region === currentRegion;
+                
+                // 搜索过滤
+                const searchMatch = !searchTerm || 
+                    site.name.toLowerCase().includes(searchTerm) ||
+                    site.description.toLowerCase().includes(searchTerm) ||
+                    site.category.toLowerCase().includes(searchTerm);
+                
+                return typeMatch && regionMatch && searchMatch;
+            });
+        }
+
+        // 按年份分组
+        function groupByYear(sites) {
+            const grouped = {};
+            sites.forEach(site => {
+                if (!grouped[site.year]) {
+                    grouped[site.year] = [];
+                }
+                grouped[site.year].push(site);
+            });
+            
+            // 按年份降序排列
+            const years = Object.keys(grouped).sort((a, b) => b - a);
+            const result = {};
+            years.forEach(year => {
+                result[year] = grouped[year];
+            });
+            
+            return result;
+        }
+
+        // 渲染网站列表
+        function renderSites() {
+            const timeline = document.getElementById('timeline');
+            const filteredSites = filterSites();
+            const groupedSites = groupByYear(filteredSites);
+            
+            if (filteredSites.length === 0) {
+                timeline.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🏜️</div>
+                        <h3>空无一物</h3>
+                        <p>没有找到符合条件的已逝网站或应用</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            Object.entries(groupedSites).forEach(([year, sites]) => {
+                html += `
+                    <div class="year-section">
+                        <div class="year-header section-header-decoration">
+                            <h2 class="year-title">${year}</h2>
+                            <span class="year-count">${sites.length} 个产品逝世</span>
+                        </div>
+                        <div class="sites-grid">
+                            ${sites.map(site => createSiteCard(site)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            timeline.innerHTML = html;
+            
+            // 添加动画延迟
+            setTimeout(() => {
+                document.querySelectorAll('.year-section').forEach((section, index) => {
+                    section.style.animationDelay = `${index * 0.1}s`;
+                });
+            }, 100);
+        }
+
+        // 获取应用图标URL
+        function getIconUrl(name, url) {
+            const iconMap = {
+                // 国外知名应用
+                'Google Reader': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/googlereader.svg',
+                'Vine': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/vine.svg',
+                'Yahoo Groups': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/yahoo.svg',
+                'Cohost': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/mastodon.svg',
+                'Orkut': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Google+': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/googleplus.svg',
+                'Flipboard': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/flipboard.svg',
+                'MySpace': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/myspace.svg',
+                'Clubhouse': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/clubhouse.svg',
+                'Quibi': 'https://logo.clearbit.com/quibi.com',
+                'Periscope': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/periscope.svg',
+                'StumbleUpon': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/stumbleupon.svg',
+                'Path': 'https://logo.clearbit.com/path.com',
+                'Foursquare Swarm': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/foursquare.svg',
+                'Meerkat': 'https://logo.clearbit.com/meerkatapp.co',
+                'Allo': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Inbox by Gmail': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/gmail.svg',
+                'Google Hangouts': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/googlemeet.svg',
+                'iGoogle': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Google Buzz': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Panoramio': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Picasa': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Google Video': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/googlevideo.svg',
+                'Google Notebook': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/google.svg',
+                'Grooveshark': 'https://logo.clearbit.com/grooveshark.com',
+                'Last.fm': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/lastdotfm.svg',
+                'Winamp': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/winamp.svg',
+                
+                // 国内应用
+                '人人网': 'https://logo.clearbit.com/renren.com',
+                '开心网': 'https://logo.clearbit.com/kaixin001.com',
+                '天涯社区': 'https://logo.clearbit.com/tianya.cn',
+                '虾米音乐': 'https://logo.clearbit.com/xiami.com',
+                '豆瓣FM': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/douban.svg',
+                '网易云音乐': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/neteasemusic.svg',
+                '快播': 'https://logo.clearbit.com/kuaibo.com',
+                '快手': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/kuaishou.svg',
+                '映客': 'https://logo.clearbit.com/inke.cn',
+                '花椒直播': 'https://logo.clearbit.com/huajiao.com',
+                'UC浏览器': 'https://logo.clearbit.com/ucweb.com',
+                '校内网': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/academia.svg',
+                '新浪微群': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/sinaweibo.svg',
+                '腾讯微博': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/tencentqq.svg',
+                '51.com': 'https://logo.clearbit.com/51.com',
+                'chinaren校友录': 'https://logo.clearbit.com/chinaren.com',
+                '百度空间': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/baidu.svg',
+                '搜狐博客': 'https://logo.clearbit.com/sohu.com',
+                '网易LOFTER': 'https://logo.clearbit.com/lofter.com',
+                '点点网': 'https://logo.clearbit.com/diandian.com',
+                '飞信': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/messenger.svg',
+                '易信': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/wechat.svg',
+                '来往': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/alibaba.svg',
+                'MSN中国': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/microsoftoutlook.svg',
+                '土豆网': 'https://logo.clearbit.com/tudou.com',
+                '56网': 'https://logo.clearbit.com/56.com',
+                '酷6网': 'https://logo.clearbit.com/ku6.com',
+                '千千静听': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/musicbrainz.svg',
+                '酷狗繁星网': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/kugou.svg',
+                '多米音乐': 'https://logo.clearbit.com/duomi.com',
+                '百度音乐': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/baidu.svg',
+                '酷我音乐': 'https://logo.clearbit.com/kuwo.cn',
+                '暴风影音': 'https://logo.clearbit.com/baofeng.com',
+                'PPTV': 'https://logo.clearbit.com/pptv.com',
+                '优酷土豆': 'https://logo.clearbit.com/youku.com',
+                '乐视TV': 'https://logo.clearbit.com/letv.com',
+                '风行': 'https://logo.clearbit.com/funshion.com',
+                '迅雷看看': 'https://logo.clearbit.com/xunlei.com',
+                '搜狗输入法': 'https://logo.clearbit.com/sogou.com',
+                'QQ输入法': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/tencentqq.svg',
+                '百度输入法': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/baidu.svg',
+                '触宝输入法': 'https://logo.clearbit.com/cootek.com',
+                '讯飞输入法': 'https://logo.clearbit.com/iflytek.com',
+                '淘宝旺旺': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/alibaba.svg',
+                'MSN': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/microsoftoutlook.svg',
+                'ICQ': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/icq.svg',
+                'Skype': 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons@v9/icons/skype.svg',
+                'YY语音': 'https://logo.clearbit.com/yy.com',
+                'IS语音': 'https://logo.clearbit.com/isyuyin.com',
+                'UC聊天': 'https://logo.clearbit.com/ucweb.com',
+                '陌陌': 'https://logo.clearbit.com/immomo.com',
+                '探探': 'https://logo.clearbit.com/tantanapp.com',
+                '花田': 'https://logo.clearbit.com/huatian.com',
+                '世纪佳缘': 'https://logo.clearbit.com/jiayuan.com',
+                '珍爱网': 'https://logo.clearbit.com/zhenai.com',
+                '有缘网': 'https://logo.clearbit.com/youyuan.com',
+                '百合网': 'https://logo.clearbit.com/baihe.com'
+            };
+            
+            // 如果有预定义的图标，使用它
+            if (iconMap[name]) {
+                return iconMap[name];
+            }
+            
+            // 尝试使用 favicon 服务
+            if (url && url !== 'N/A') {
+                // 清理URL，确保格式正确
+                let cleanUrl = url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+                return `https://www.google.com/s2/favicons?domain=${cleanUrl}&sz=32`;
+            }
+            
+            // 没有图标时返回null
+            return null;
+        }
+
+        // 创建网站卡片
+        function createSiteCard(site) {
+            const iconUrl = getIconUrl(site.name, site.url);
+            return `
+                <div class="site-card">
+                    <div class="site-header">
+                        <div class="site-info">
+                            ${iconUrl ? `<img src="${iconUrl}" alt="${site.name}" class="site-icon" onerror="this.style.display='none'">` : ''}
+                            <div class="site-details">
+                                <h3 class="site-name">${site.name}</h3>
+                                <div class="site-url">${site.url}</div>
+                            </div>
+                        </div>
+                        <div class="site-badges">
+                            <span class="badge ${site.type}">${getTypeLabel(site.type)}</span>
+                            <span class="badge ${site.region}">${getRegionLabel(site.region)}</span>
+                        </div>
+                    </div>
+                    <p class="site-description">${site.description}</p>
+                    <div class="site-meta">
+                        <span class="death-date">逝世日期: ${formatDate(site.deathDate)}</span>
+                        <span class="category-tag">${site.category}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 获取类型标签
+        function getTypeLabel(type) {
+            const labels = {
+                'website': '网站',
+                'app': '应用',
+                'service': '服务'
+            };
+            return labels[type] || type;
+        }
+
+        // 获取地区标签
+        function getRegionLabel(region) {
+            const labels = {
+                'domestic': '国内',
+                'international': '国外'
+            };
+            return labels[region] || region;
+        }
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('zh-CN', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // 更新统计数据
+        function updateStats() {
+            const totalSites = deadSites.length;
+            const domesticSites = deadSites.filter(site => site.region === 'domestic').length;
+            const internationalSites = deadSites.filter(site => site.region === 'international').length;
+            
+            // 动画更新数字
+            animateNumber('totalSites', totalSites);
+            animateNumber('domesticSites', domesticSites);
+            animateNumber('internationalSites', internationalSites);
+        }
+
+        // 数字动画
+        function animateNumber(elementId, targetNumber) {
+            const element = document.getElementById(elementId);
+            const duration = 2000;
+            const startTime = Date.now();
+            const startNumber = 0;
+
+            function updateNumber() {
+                const now = Date.now();
+                const progress = Math.min((now - startTime) / duration, 1);
+                const currentNumber = Math.floor(startNumber + (targetNumber - startNumber) * progress);
+                
+                element.textContent = currentNumber;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                }
+            }
+            
+            updateNumber();
+        }
+    </script>
+</body>
+</html> 
